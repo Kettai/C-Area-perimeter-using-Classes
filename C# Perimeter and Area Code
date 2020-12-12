@@ -1,0 +1,244 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Perimeter Area Code
+{
+    class Program  //main program
+    {
+        static void Main(string[] args)
+        {
+                      
+                
+
+            GraphObject[] trishape= new RightTriangle[2];  // New Triangles and Squares
+
+            trishape[0] = new RightTriangle();
+            trishape[0] = new RightTriangle(6,8);
+            trishape[1] = new RightTriangle();
+            trishape[1] = new RightTriangle(5, 15);
+
+            GraphObject[] squareshape = new Square[2];
+            squareshape[0] = new Square();
+            squareshape[0] = new Square(8);
+            squareshape[1] = new Square();
+            squareshape[1] = new Square(7);
+            Console.WriteLine("#1 object:" + trishape[0].ToString());  //triangle with a base 6 and height 8
+            Console.WriteLine("#2 object:" + squareshape[0].ToString());  //square with segments = 8
+            Console.WriteLine("#3 object:" + trishape[1].ToString()); //triangle with base 5 and height 15
+            Console.WriteLine("#4 object:" + squareshape[1].ToString()); //square with segments =7
+
+
+            GraphObject[] shapearray = new GraphObject[4]; //put all the shape values in one single array
+            shapearray.SetValue(trishape[0], 0);
+            shapearray.SetValue(trishape[1], 1);
+            shapearray.SetValue(squareshape[0], 2);
+            shapearray.SetValue(squareshape[1], 3);
+
+       
+
+            double[] shape = new double[4]; //array for area for a reference for FindLargest
+            double[] shape1 = new double[4]; //for perimeter for a reference for FindLargest
+
+            for (int y=0; y<4; y++)
+            {
+                shape[y] = shapearray[y].cal_area();
+                shape1[y] = shapearray[y].cal_perimeter();
+            }
+     
+            int n = 0; double x = 0;
+
+            Utilities.FindLargest(ref n, ref x, shape);
+            Utilities.FindLargest2(ref n, ref x, shape1);
+
+            Console.ReadKey();
+            
+           
+
+        }
+    }
+}
+// first class 
+ abstract class GraphObject
+    {
+        
+        protected double area;
+
+
+        protected double perimeter;
+
+        
+        public GraphObject()  //default constructor
+        {
+            area = 0;
+
+            perimeter = 0;
+        }
+
+        
+        public GraphObject(double are, double peri)//overloading constructor
+        {
+            area = are;
+
+            perimeter = peri;
+        }
+
+        public abstract double cal_area();
+
+
+        public abstract double cal_perimeter();
+
+        ~GraphObject() { } //destructor
+    }
+    
+  //second class
+   class Square: GraphObject 
+    {
+       
+        private int segment;
+
+        
+        public Square()//default constructor
+        {
+            segment = 0;
+        }
+
+        
+        public Square(int seg)//overloading constructor
+        {
+            segment = seg;
+        }
+
+        
+        public int Segment
+        {
+            get { return segment; }
+            set { segment = value; }
+        }
+
+       
+        public override double cal_area()
+        {
+            double area = segment * segment;
+            return area;
+        }
+
+        public override double cal_perimeter()
+        {
+            double perimeter = segment + segment + segment + segment;
+            return perimeter;
+        }
+
+        public override string ToString()
+        {
+            return " A square, segment = " + segment.ToString() + ", area = " + cal_area().ToString() + ", perimeter = " + cal_perimeter().ToString();
+        }
+
+       
+        ~Square() { } //destructor
+
+    }
+    //third class
+     class RightTriangle : GraphObject
+    {
+        
+        private int height;
+        private int bas;
+
+        
+        public RightTriangle()//default constructor
+        {
+            height = 0;
+            bas = 0;
+        }
+
+        
+        public RightTriangle(int he, int ba) //overloading constructor
+        {
+            height = he;
+            bas = ba;
+        }
+
+      
+        public int Height
+        {
+            get { return height; }
+            set { height = value; }
+        }
+
+        public int Bas
+        {
+            get { return bas; }
+            set { bas = value; }
+
+        }
+
+       
+        public override double cal_area()
+        {
+            double area = (bas * height * 0.5);
+            return area;
+        }
+
+        public override double cal_perimeter()
+        {
+            double hypotenuse = Math.Sqrt((height*height) + (bas*bas));
+            double perimeter = height + hypotenuse + bas;
+            return perimeter;
+        }
+        
+        public override string ToString()
+        {
+            return " A triangle, height = " + height.ToString() + ", base = " + bas.ToString() + ", area = " + cal_area().ToString() + ", perimeter = " + cal_perimeter().ToString();
+        }
+
+        //destructor
+        ~RightTriangle() { }
+        }
+        
+        //4th class
+        
+         class Utilities
+    {
+        
+        public static void FindLargest(ref int n, ref double largestarea, double [] shape) 
+        {
+            n = 0;
+         
+            largestarea = shape[0];
+            
+            for (int i = 0; i < shape.Length; i++)
+            {
+                if (largestarea < shape[i])
+                {
+                    n = i;
+                    
+                    largestarea = shape[i];
+                   
+                }
+               
+            }
+            Console.WriteLine("\n#2 object has the largest area of  " + "{0}", largestarea);
+        }
+        public static void FindLargest2(ref int n, ref double largestperi, double[] shape1)
+        {
+            n = 0;
+
+            largestperi = shape1[0];
+
+            for (int i = 0; i < shape1.Length; i++)
+            {
+                if (largestperi < shape1[i])
+                {
+                    n = i;
+
+                    largestperi = shape1[i];
+
+                }
+
+            }
+            Console.WriteLine("\n#3 object has the largest perimeter of  " + "{0}", largestperi);
+        }
+    }
